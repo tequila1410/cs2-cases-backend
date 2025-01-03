@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Exclude } from "class-transformer";
 
 @Schema()
 export class User extends Document {
