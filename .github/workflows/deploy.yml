@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa  # Установка правильных прав
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa 165.22.70.212 >> ~/.ssh/known_hosts
 
       - name: Build Docker image
