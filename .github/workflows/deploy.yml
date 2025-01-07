@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker -f Dockerfile-prod build -t cs2-cases-image .
+          docker build -f Dockerfile-prod -t cs2-cases-image .
 
       - name: Deploy to server
         run: |
