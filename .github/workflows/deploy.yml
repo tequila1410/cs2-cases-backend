@@ -1,0 +1,31 @@
+name: Build and Deploy Docker Container
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa  # Установка правильных прав
+          ssh-keyscan -t rsa 165.22.70.212 >> ~/.ssh/known_hosts
+
+      - name: Build Docker image
+        run: |
+          docker build -t cs2-cases-image .
+
+      - name: Deploy to server
+        run: |
+          ssh cs2cases@165.22.70.212 'docker pull cs2-cases-image || true && docker -f Dockerfile-prod build -t cs2-cases-image . && docker-compose -f Dockerfile-prod up -d'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
