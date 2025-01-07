@@ -59,6 +59,9 @@ jobs:
           script: |
             # Login to registry
             docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
+            export MONGO_URI=${{ secrets.MONGO_URI }}
+            export BASE_URL=${{ secrets.BASE_URL }}
+            export JWT_SECRET=${{ secrets.JWT_SECRET }}
             # Stop running container
             docker stop $(echo $IMAGE_NAME)
             # Remove old container
@@ -67,7 +70,4 @@ jobs:
             docker run -d \
             --restart always \
             --name $(echo $IMAGE_NAME) \
-            -e MONGO_URI=${{ secrets.MONGO_URI }} \
-            -e BASE_URL=${{ secrets.BASE_URL }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
             $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
