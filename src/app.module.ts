@@ -1,9 +1,14 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from "@nestjs/common";
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from './auth/auth.module';
+import { CasesModule } from './cases/cases.module';
+import { SkinsModule } from './skins/skins.module';
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { join } from 'path';
+import { MulterModule } from "@nestjs/platform-express";
 
 @Module({
   imports: [
@@ -12,9 +17,19 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
-    AuthModule
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads'
+    }),
+    MulterModule.register({
+      dest: './uploads/skins'
+    }),
+    AuthModule,
+    CasesModule,
+    SkinsModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+}

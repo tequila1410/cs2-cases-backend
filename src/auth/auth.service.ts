@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { InjectModel } from "@nestjs/mongoose";
-import { User } from "./schemas/user.schema";
 import { Model } from "mongoose";
+import { InjectModel } from "@nestjs/mongoose";
+import * as bcrypt from 'bcrypt';
+
+import { User } from "./schemas/user.schema";
 import { SignupDto } from "./dto/signup.dto";
 import { SigninDto } from "./dto/signin.dto";
 
